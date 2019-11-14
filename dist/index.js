@@ -4,82 +4,101 @@ Object.defineProperty(exports, '__esModule', { value: true });
 
 var React = require('react');
 
-/*! *****************************************************************************
-Copyright (c) Microsoft Corporation. All rights reserved.
-Licensed under the Apache License, Version 2.0 (the "License"); you may not use
-this file except in compliance with the License. You may obtain a copy of the
-License at http://www.apache.org/licenses/LICENSE-2.0
-
-THIS CODE IS PROVIDED ON AN *AS IS* BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-KIND, EITHER EXPRESS OR IMPLIED, INCLUDING WITHOUT LIMITATION ANY IMPLIED
-WARRANTIES OR CONDITIONS OF TITLE, FITNESS FOR A PARTICULAR PURPOSE,
-MERCHANTABLITY OR NON-INFRINGEMENT.
-
-See the Apache Version 2.0 License for specific language governing permissions
-and limitations under the License.
-***************************************************************************** */
-/* global Reflect, Promise */
-
-var extendStatics = function(d, b) {
-    extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
-    return extendStatics(d, b);
-};
-
-function __extends(d, b) {
-    extendStatics(d, b);
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-}
-
-function styleInject(css, ref) {
-  if ( ref === void 0 ) ref = {};
-  var insertAt = ref.insertAt;
-
-  if (!css || typeof document === 'undefined') { return; }
-
-  var head = document.head || document.getElementsByTagName('head')[0];
-  var style = document.createElement('style');
-  style.type = 'text/css';
-
-  if (insertAt === 'top') {
-    if (head.firstChild) {
-      head.insertBefore(style, head.firstChild);
-    } else {
-      head.appendChild(style);
-    }
-  } else {
-    head.appendChild(style);
-  }
-
-  if (style.styleSheet) {
-    style.styleSheet.cssText = css;
-  } else {
-    style.appendChild(document.createTextNode(css));
-  }
-}
-
-var css = "/* add css styles here (optional) */\n\n.styles_test__32Qsm {\n  display: inline-block;\n  margin: 2em auto;\n  border: 2px solid #000;\n  font-size: 2em;\n}\n";
-var styles = {"test":"styles_test__32Qsm"};
-styleInject(css);
-
 /**
- * @class ExampleComponent
+ * @license
+ * MIT License
+ *
+ * Copyright (c) 2019 Alexis Munsayac
+ * Permission is hereby granted, free of charge, to any person obtaining a copy
+ * of this software and associated documentation files (the "Software"), to deal
+ * in the Software without restriction, including without limitation the rights
+ * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+ * copies of the Software, and to permit persons to whom the Software is
+ * furnished to do so, subject to the following conditions:
+ *
+ * The above copyright notice and this permission notice shall be included in all
+ * copies or substantial portions of the Software.
+ *
+ * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+ * IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+ * FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+ * AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+ * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+ * OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+ * SOFTWARE.
+ *
+ *
+ * @author Alexis Munsayac <alexis.munsayac@gmail.com>
+ * @copyright Alexis Munsayac 2019
  */
-var ExampleComponent = /** @class */ (function (_super) {
-    __extends(ExampleComponent, _super);
-    function ExampleComponent() {
-        return _super !== null && _super.apply(this, arguments) || this;
-    }
-    ExampleComponent.prototype.render = function () {
-        var text = this.props.text;
-        return (React.createElement("div", { className: styles.test },
-            "Example Component: ",
-            text));
-    };
-    return ExampleComponent;
-}(React.Component));
+function useEvent(socket, event, listen, setState) {
+    React.useEffect(function () {
+        if (listen) {
+            socket.addEventListener(event, setState);
+            return function () { return socket.removeEventListener(event, setState); };
+        }
+        return function () { };
+    }, [socket, event, listen]);
+}
+/**
+ * A React Hook that listens to a WebSocket instance's WebSocket event.
+ *
+ * Re-renders the component whenever the event emits.
+ *
+ * @param socket a WebSocket instance
+ * @param event a WebSocket event
+ * @param listen conditionally listen to the event, defaults to true.
+ */
+function useWebSocketEvent(socket, event, listen) {
+    if (listen === void 0) { listen = true; }
+    var _a = React.useState(), state = _a[0], setState = _a[1];
+    useEvent(socket, event, listen, setState);
+    return state;
+}
+/**
+ * Listens to a WebSocket instance's 'open' event
+ * @param socket a WebSocket instance
+ * @param listen conditionally listen to the event, defaults to true
+ */
+var useWebSocketOpen = function (socket, listen) {
+    if (listen === void 0) { listen = true; }
+    return useWebSocketEvent(socket, 'open', listen);
+};
+/**
+ * Listens to a WebSocket instance's 'error' event
+ * @param socket a WebSocket instance
+ * @param listen conditionally listen to the event, defaults to true
+ */
+var useWebSocketError = function (socket, listen) {
+    if (listen === void 0) { listen = true; }
+    return useWebSocketEvent(socket, 'error', listen);
+};
+/**
+ * Listens to a WebSocket instance's 'close' event
+ * @param socket a WebSocket instance
+ * @param listen conditionally listen to the event, defaults to true
+ */
+function useWebSocketClose(socket, listen) {
+    if (listen === void 0) { listen = true; }
+    var _a = React.useState(), state = _a[0], setState = _a[1];
+    useEvent(socket, 'close', listen, setState);
+    return state;
+}
+/**
+ * Listens to a WebSocket instance's 'message' event
+ * @param socket a WebSocket instance
+ * @param listen conditionally listen to the event, defaults to true.
+ */
+function useWebSocketMessage(socket, listen) {
+    if (listen === void 0) { listen = true; }
+    var _a = React.useState(), state = _a[0], setState = _a[1];
+    useEvent(socket, 'message', listen, setState);
+    return state;
+}
 
-exports.default = ExampleComponent;
+exports.default = useWebSocketEvent;
+exports.useWebSocketOpen = useWebSocketOpen;
+exports.useWebSocketError = useWebSocketError;
+exports.useWebSocketClose = useWebSocketClose;
+exports.useWebSocketMessage = useWebSocketMessage;
 //# sourceMappingURL=index.js.map
