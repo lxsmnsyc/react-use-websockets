@@ -1,6 +1,6 @@
 {
   "name": "@lxsmnsyc/react-use-websockets",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "React Hooks + WebSockets",
   "author": "lxsmnsyc",
   "license": "MIT",
@@ -23,8 +23,8 @@
   },
   "dependencies": {},
   "peerDependencies": {
-    "react": "^15.0.0 || ^16.0.0",
-    "react-dom": "^15.0.0 || ^16.0.0"
+    "react": "^16.8.0",
+    "react-dom": "^16.8.0"
   },
   "devDependencies": {
     "@svgr/rollup": "^2.4.1",
