@@ -1,115 +1,31 @@
-# react-use-websockets
-React Hooks + WebSockets API
+# @lxsmnsyc/react-use-websockets
+
+> React Hooks + WebSockets
+
+[![NPM](https://img.shields.io/npm/v/@lxsmnsyc/react-use-websockets.svg)](https://www.npmjs.com/package/@lxsmnsyc/react-use-websockets) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## Install
 
-### Node
-
-NPM
-
-```sh
-npm i use-websockets
-```
-
-Yarn
-
-```sh
-yarn add use-websockets
-```
-
-### Browser
-
-> This requires the React CDN
-
-jsDelivr
-
-```html
-<script src="https://cdn.jsdelivr.net/npm/use-websockets/dist/index.min.js"></script>
-```
-
-unpkg
-
-```html
-<script src="https://unpkg.com/use-websockets/dist/index.min.js"></script>
+```bash
+npm install --save @lxsmnsyc/react-use-websockets
 ```
 
 ## Usage
 
-```jsx
-import React from 'react';
-import useWebSockets from 'use-websockets';
+```tsx
+import * as React from 'react'
 
-const wss = new WebSocket('ws://localhost:8080');
+import MyComponent from '@lxsmnsyc/react-use-websockets'
 
-function App() {
-  const onMessageData = useWebSockets.onMessage(wss);
-  const onErrorData = useWebSockets.onError(wss);
-  const onCloseData = useWebSockets.onClose(wss);
-  const onOpenData = useWebSockets.onOpen(wss);
-
-  if (onErrorData) {
+class Example extends React.Component {
+  render () {
     return (
-      <h3>
-        An error occured.
-      </h3>
-    );
+      <MyComponent />
+    )
   }
-  if (onCloseData) {
-    return (
-      <h3>
-        Connection closed.
-      </h3>
-    );
-  }
-  if (onMessageData) {
-    return (
-      <h3>
-        Message received : { onMessageData }
-      </h3>
-    );
-  }
-  if (onOpenData) {
-    return (
-      <h3>
-        Connection established.
-      </h3>
-    );
-  }
-  return (
-    <h3>
-      Waiting for a connection.
-    </h3>
-  );
 }
-
-export default App;
 ```
 
-## Build
+## License
 
-
-## Build
-
-Clone the repo first, then run the following to install the dependencies
-
-```sh
-npm install
-```
-
-or 
-
-```sh
-yarn install
-```
-
-To build the distributable modules:
-
-```sh
-npm run build
-```
-
-or
-
-```sh
-yarn build
-```
+MIT © [lxsmnsyc](https://github.com/lxsmnsyc)
